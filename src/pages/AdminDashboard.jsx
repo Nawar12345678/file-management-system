@@ -1,21 +1,26 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Box, Button, Typography, Grid } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  background: "linear-gradient(135deg, #4a90e2 0%, #9013fe 100%)",
+const StyledBox = styled(Box)(({ theme, isDarkMode  }) => ({
+  background: isDarkMode ? '#8796A5' : "linear-gradient(135deg, #4a90e2 0%, #9013fe 100%)",
   minHeight: "100vh",
   padding: theme.spacing(4),
   color: "#fff",
 }));
 
-const AdminDashboard = () => {
+const AdminDashboard = ({toggleDarkMode, isDarkMode }) => {
   const navigate = useNavigate(); 
 
   return (
-    <StyledBox>
+    <StyledBox isDarkMode={isDarkMode}>
+         <Box display="flex" justifyContent="Left" mb={3}>
+            <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+          </Box>
       <Typography variant="h4" gutterBottom align="center">
         Admin Dashboard
       </Typography>
@@ -31,7 +36,7 @@ const AdminDashboard = () => {
               padding: 2,
               fontSize: "16px",
               fontWeight: "bold",
-              background: "linear-gradient(45deg, #2196F3, #21CBF3)",
+              background:  "linear-gradient(45deg, #2196F3, #21CBF3)",
             }}
           >
             Create Group

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendInvitation } from "../services/api";
@@ -8,8 +9,9 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const SendInvitationPage = () => {
+const SendInvitationPage = ( { toggleDarkMode, isDarkMode }) => {
   const [groupId, setGroupId] = useState("");
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,11 @@ const SendInvitationPage = () => {
   };
 
   return (
-    <Box p={4} maxWidth={600} mx="auto">
+    <Box p={4} maxWidth={600} mx="auto"backgroundColor= {isDarkMode ? '#8796A5': '#ffff'}>
+    
+    <Box display="flex" justifyContent="Left" mb={3}>
+    <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+  </Box>
       <Typography variant="h4" align="center" gutterBottom>
         Send Invitation
       </Typography>

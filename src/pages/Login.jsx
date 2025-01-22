@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import {
@@ -10,28 +11,29 @@ import {
 import { styled } from "@mui/system";
 import { loginUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const StyledBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)(({ theme, isDarkMode }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   height: "100vh",
-  background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+  background:  isDarkMode ? '#8796A5': "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
 }));
 
-const StyledForm = styled(Box)(({ theme }) => ({
-  backgroundColor: "#fff",
+const StyledForm = styled(Box)(({ theme, isDarkMode }) => ({
+  background: isDarkMode ? 'rgba(0,1,1,0.5)':   "#fff",
   padding: theme.spacing(4),
   borderRadius: theme.spacing(1),
-  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
+  boxShadow:  isDarkMode ? "#ffff" : "0px 4px 20px rgba(0, 0, 0, 0.2)",
   display: "flex",
   flexDirection: "column",
   width: "100%",
   maxWidth: "400px",
 }));
 
-const Login = () => {
+const Login = ( {isDarkMode, toggleDarkMode} ) => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -45,12 +47,17 @@ const Login = () => {
   const handleLogin = async () => {
     setLoading(true);
     setError("");
-
+  
     try {
       const response = await loginUser(credentials);
       console.log("Login successful:", response);
-      localStorage.setItem("token", response.token); 
-      navigate("/user-dashboard");
+  
+      if (response?.token) {
+        localStorage.setItem("token", response.token);
+        navigate("/user-dashboard");
+      } else {
+        throw new Error("Login response is missing a token. Please contact support.");
+      }
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
       console.error("Login error:", err);
@@ -58,10 +65,13 @@ const Login = () => {
       setLoading(false);
     }
   };
-
+  
   return (
-    <StyledBox>
-      <StyledForm>
+    <StyledBox isDarkMode={isDarkMode}>
+    <Box display="flex" justifyContent="Left" mb={3}>
+       <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+     </Box>
+           <StyledForm isDarkMode={isDarkMode}>
         <Typography variant="h5" gutterBottom align="center">
           Welcome Back
         </Typography>

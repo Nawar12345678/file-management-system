@@ -14,8 +14,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { getFilesForGroupadmin, getFilesForGroup, getUsersForGroup } from "../services/api";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const FilesArchivePage = ({ token, groupId, userType }) => {
+const FilesArchivePage = ({ token, groupId, userType, toggleDarkMode, isDarkMode }) => {
   const [files, setFiles] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -80,8 +81,11 @@ const FilesArchivePage = ({ token, groupId, userType }) => {
   }, [token, groupId, userType]);
 
   return (
-    <Box p={4}>
-      <Typography
+    <Box p={4} backgroundColor= {isDarkMode ? '#8796A5': '#ffff'}>
+    <Box display="flex" justifyContent="Left" mb={3}>
+    <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+  </Box>     
+   <Typography
         variant="h4"
         align="center"
         gutterBottom

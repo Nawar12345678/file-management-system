@@ -34,7 +34,8 @@ import {
   getReportsForFile,
 } from "../services/api";
 import { useNavigate } from "react-router-dom";
-const ViewGroupsPage = ({ token, userType }) => {
+import DarkModeSwitch from "./DarkModeSwitch";
+const ViewGroupsPage = ({ token, userType,  isDarkMode, toggleDarkMode }) => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [files, setFiles] = useState([]);
@@ -238,7 +239,10 @@ const ViewGroupsPage = ({ token, userType }) => {
   );
 
   return (
-    <Box p={4}>
+    <Box p={4} backgroundColor= {isDarkMode ? '#8796A5': '#ffff'}>
+       <Box display="flex" justifyContent="Left" mb={3}>
+       <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+     </Box>
       <Typography variant="h4" align="center" gutterBottom>
         View Groups
       </Typography>

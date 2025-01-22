@@ -39,12 +39,22 @@ export const loginUser = async (credentials) => {
 // Create Group API Call*
 export const createGroup = async (groupData) => {
   try {
-    const response = await API.post('/group/create', groupData);
-    return response.data; // Expecting the newly created group data
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Authentication token is missing. Please log in.");
+    }
+
+    const response = await API.post('/group/create', groupData, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data; 
   } catch (error) {
     throw error.response ? error.response.data : { message: 'Something went wrong while creating group!' };
   }
 };
+
 // Get Groups for User API Call*
 export const getGroupsForUser = async () => {
   try {
@@ -143,7 +153,7 @@ export const downloadFile = async (fileId) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `file-${fileId}`); // اسم الملف
+      link.setAttribute('download', `file-${fileId}`);
       document.body.appendChild(link);
       link.click();
   
@@ -245,7 +255,7 @@ export const acceptFile = async (fileId) => {
       return { success: false, error: error.response?.data || error.message };
     }
   };
-  // getReportsForFile API*
+  // getReportsForFile API
 export const getReportsForFile = async (fileId) => {
     try {
         const response = await API.get(`/report/file`, {

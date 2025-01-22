@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import {
@@ -16,8 +17,9 @@ import {
   TableContainer,
 } from "@mui/material";
 import { createGroup, addFile, getFilesForGroup, deleteFile, downloadFile } from "../services/api";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const GroupManagementPage = () => {
+const GroupManagementPage = ({isDarkMode, toggleDarkMode}) => {
   const [groupName, setGroupName] = useState("");
   const [groupId, setGroupId] = useState(null); 
   const [files, setFiles] = useState([]); 
@@ -43,15 +45,24 @@ const GroupManagementPage = () => {
   }, []);
 
   const handleCreateGroup = async () => {
-    if (!groupName.trim()) return alert("Please enter a group name!");
+    if (!groupName.trim()) {
+      alert("Please enter a group name!");
+      return;
+    }
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Authentication token is missing. Please log in.");
+    }
+   
     setLoading(true);
     try {
       if (useRandomData) {
-        setGroupId(Math.floor(Math.random() * 1000)); 
-        alert("Group created ");
+        setGroupId(Math.floor(Math.random() * 1000));
+        alert("Group created");
       } else {
         const result = await createGroup({ name: groupName });
-        setGroupId(result.group.id); 
+        setGroupId(result.group.id);
         alert("Group created successfully!");
       }
     } catch (error) {
@@ -60,6 +71,8 @@ const GroupManagementPage = () => {
       setLoading(false);
     }
   };
+  
+  
 
   const handleAddFile = async () => {
     if (!fileInput || !groupId) return alert("Please select a file and create a group first!");
@@ -130,7 +143,10 @@ const GroupManagementPage = () => {
   };
 
   return (
-    <Box p={3}>
+    <Box p={3}  backgroundColor= {isDarkMode ? '#8796A5': '#ffff'} >
+       <Box display="flex" justifyContent="Left" mb={3}>
+       <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+     </Box>
       <Typography
         variant="h4"
         align="center"

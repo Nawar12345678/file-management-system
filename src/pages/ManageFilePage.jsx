@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import {
@@ -21,8 +22,9 @@ import {
   getBackupForFile,
   downloadBackup,
 } from "../services/api";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const ManageFilePage = () => {
+const ManageFilePage = ( { isDarkMode, toggleDarkMode }) => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("");
   const [files, setFiles] = useState([]);
@@ -138,8 +140,11 @@ const ManageFilePage = () => {
   };
 
   return (
-    <Box p={4}>
-      <Typography
+    <Box p={4} backgroundColor= {isDarkMode ? '#8796A5': '#ffff'}>
+    <Box display="flex" justifyContent="Left" mb={3}>
+    <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+  </Box>     
+   <Typography
         variant="h4"
         align="center"
         gutterBottom

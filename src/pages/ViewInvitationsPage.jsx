@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import  { useEffect, useState } from "react";
 import { getInvitationsForUser, acceptInvitation } from "../services/api";
 import {
@@ -11,8 +12,9 @@ import {
   TableRow,
   CircularProgress,
 } from "@mui/material";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const ViewInvitationsPage = () => {
+const ViewInvitationsPage = ( { isDarkMode, toggleDarkMode } ) => {
   const [invitations, setInvitations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); 
@@ -59,8 +61,11 @@ const ViewInvitationsPage = () => {
   };
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box p={4} backgroundColor= {isDarkMode ? '#8796A5': '#ffff'}>
+    <Box display="flex" justifyContent="Left" mb={3}>
+    <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+  </Box>   
+    <Typography variant="h4" align="center" gutterBottom>
         My Invitations
       </Typography>
 

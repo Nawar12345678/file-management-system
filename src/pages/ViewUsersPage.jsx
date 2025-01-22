@@ -16,8 +16,9 @@ import {
 } from "@mui/material";
 import { getUsers, searchUser, getUsersForGroup, getReportsForUser } from "../services/api";
 import { useLocation } from "react-router-dom";
+import DarkModeSwitch from "./DarkModeSwitch";
 
-const ViewUsersPage = ({ token }) => {
+const ViewUsersPage = ({ token, isDarkMode, toggleDarkMode }) => {
   const location = useLocation();
   const { groupId } = location.state || {};
 
@@ -94,8 +95,11 @@ const ViewUsersPage = ({ token }) => {
   };
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box p={4} backgroundColor= {isDarkMode ? '#8796A5': '#ffff'}>
+    <Box display="flex" justifyContent="Left" mb={3}>
+    <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}   />
+  </Box>     
+   <Typography variant="h4" align="center" gutterBottom>
         {groupId ? `Users in Group: ${groupId}` : "View Users"}
       </Typography>
 
